@@ -1,7 +1,7 @@
 package dk.alexandra.fresco.samples.xtabs;
 
+import dk.alexandra.fresco.framework.Application;
 import dk.alexandra.fresco.framework.DRes;
-import dk.alexandra.fresco.framework.builder.Computation;
 import dk.alexandra.fresco.framework.builder.numeric.Comparison;
 import dk.alexandra.fresco.framework.builder.numeric.Numeric;
 import dk.alexandra.fresco.framework.builder.numeric.ProtocolBuilderNumeric;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Xtabs implements Computation<List<Integer>, ProtocolBuilderNumeric> {
+public class Xtabs implements Application<List<Integer>, ProtocolBuilderNumeric> {
 
   /**
    * The number of bins.
@@ -21,7 +21,7 @@ public class Xtabs implements Computation<List<Integer>, ProtocolBuilderNumeric>
   /**
    * The number of bits required to represent a bin label (0-4)
    */
-  public static final int BIN_LABEL_BITS = 3;
+  public static final int BIN_LABEL_BITS = 4;
 
   /**
    * The number of bits required to represent an id (this is not specified in the criteria for
@@ -30,6 +30,7 @@ public class Xtabs implements Computation<List<Integer>, ProtocolBuilderNumeric>
   public static final int ID_BITS = 10;
 
   public enum Ids {
+
     ALICE(1), BOB(2);
 
     private int myId;
@@ -101,13 +102,17 @@ public class Xtabs implements Computation<List<Integer>, ProtocolBuilderNumeric>
     Comparison comparison = builder.comparison();
     for (int i = 0; i < aliceIds.size(); i++) {
       DRes<SInt> idA = aliceIds.get(i);
+      List<DRes<SInt>> indexVector = new ArrayList<>(binLabels.size());
+      for (DRes<SInt> label : binLabels) {
+        indexVector.add(comparison.equals(binsList.get(i), label));
+      }
       for (int j = 0; j < bobIds.size(); j++) {
         DRes<SInt> idB = bobIds.get(j);
-        DRes<SInt> idMatch = comparison.equals(ID_BITS, idA, idB);
+        DRes<SInt> idMatch = comparison.equals(idA, idB);
+        DRes<SInt> term = numeric.mult(idMatch, valuesList.get(j));
         for (int k = 0; k < binLabels.size(); k++) {
-          DRes<SInt> binMatch = comparison.equals(BIN_LABEL_BITS, binsList.get(i), binLabels.get(k));
-          DRes<SInt> term = numeric.mult(numeric.mult(idMatch, binMatch), valuesList.get(j));
-          binSums.set(k, numeric.add(term, binSums.get(k)));
+          DRes<SInt> indexterm = numeric.mult(indexVector.get(k), term);
+          binSums.set(k, numeric.add(indexterm, binSums.get(k)));
         }
       }
     }
