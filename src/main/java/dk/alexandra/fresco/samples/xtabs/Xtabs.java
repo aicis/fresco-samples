@@ -104,11 +104,11 @@ public class Xtabs implements Application<List<Integer>, ProtocolBuilderNumeric>
       DRes<SInt> idA = aliceIds.get(i);
       List<DRes<SInt>> indexVector = new ArrayList<>(binLabels.size());
       for (DRes<SInt> label : binLabels) {
-        indexVector.add(comparison.equals(binsList.get(i), label));
+        indexVector.add(comparison.equals(BIN_LABEL_BITS, binsList.get(i), label));
       }
       for (int j = 0; j < bobIds.size(); j++) {
         DRes<SInt> idB = bobIds.get(j);
-        DRes<SInt> idMatch = comparison.equals(idA, idB);
+        DRes<SInt> idMatch = comparison.equals(ID_BITS, idA, idB);
         DRes<SInt> term = numeric.mult(idMatch, valuesList.get(j));
         for (int k = 0; k < binLabels.size(); k++) {
           DRes<SInt> indexterm = numeric.mult(indexVector.get(k), term);

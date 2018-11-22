@@ -4,7 +4,6 @@ import dk.alexandra.fresco.framework.Party;
 import dk.alexandra.fresco.framework.configuration.NetworkConfiguration;
 import dk.alexandra.fresco.framework.configuration.NetworkConfigurationImpl;
 import dk.alexandra.fresco.framework.network.CloseableNetwork;
-import dk.alexandra.fresco.framework.util.Pair;
 import dk.alexandra.fresco.samples.SpdzParty;
 import java.io.IOException;
 import java.util.HashMap;
