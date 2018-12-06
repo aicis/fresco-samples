@@ -1,12 +1,12 @@
 package dk.alexandra.fresco.samples.mult3;
 
+import static dk.alexandra.fresco.samples.Id.*;
+
 import dk.alexandra.fresco.framework.Application;
 import dk.alexandra.fresco.framework.DRes;
 import dk.alexandra.fresco.framework.builder.numeric.ProtocolBuilderNumeric;
 import dk.alexandra.fresco.framework.value.SInt;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MultThree implements Application<Integer, ProtocolBuilderNumeric> {
 
@@ -18,15 +18,13 @@ public class MultThree implements Application<Integer, ProtocolBuilderNumeric> {
 
   @Override
   public DRes<Integer> buildComputation(ProtocolBuilderNumeric builder) {
-    List<DRes<SInt>> sFactors = new ArrayList<>(3);
     // Input factors
-    for (int i = 1; i <= 3; i++) {
-      DRes<SInt> sFactor = builder.numeric().input(BigInteger.valueOf(factor), i);
-      sFactors.add(sFactor);
-    }
+    DRes<SInt> factA = builder.numeric().input(BigInteger.valueOf(factor), ALICE.id());
+    DRes<SInt> factB = builder.numeric().input(BigInteger.valueOf(factor), BOB.id());
+    DRes<SInt> factC = builder.numeric().input(BigInteger.valueOf(factor), CAROL.id());
     // Multiply numbers
-    DRes<SInt> temp = builder.numeric().mult(sFactors.get(0), sFactors.get(1));
-    DRes<SInt> result = builder.numeric().mult(temp, sFactors.get(2));
+    DRes<SInt> temp = builder.numeric().mult(factA, factB);
+    DRes<SInt> result = builder.numeric().mult(temp, factC);
     // Open the result
     DRes<BigInteger> openResult = builder.numeric().open(result);
     return () -> openResult.out().intValue();

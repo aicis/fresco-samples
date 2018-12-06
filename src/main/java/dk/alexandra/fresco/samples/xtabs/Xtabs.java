@@ -1,5 +1,7 @@
 package dk.alexandra.fresco.samples.xtabs;
 
+import static dk.alexandra.fresco.samples.Id.*;
+
 import dk.alexandra.fresco.framework.Application;
 import dk.alexandra.fresco.framework.DRes;
 import dk.alexandra.fresco.framework.builder.numeric.Comparison;
@@ -29,21 +31,6 @@ public class Xtabs implements Application<List<Integer>, ProtocolBuilderNumeric>
    */
   public static final int ID_BITS = 10;
 
-  public enum Ids {
-
-    ALICE(1), BOB(2);
-
-    private int myId;
-
-    Ids(int myId) {
-      this.myId = myId;
-    }
-
-    public int id() {
-      return myId;
-    }
-  }
-
   private int[] ids;
   private int[] values;
   private int[] bins;
@@ -57,11 +44,11 @@ public class Xtabs implements Application<List<Integer>, ProtocolBuilderNumeric>
   }
 
   public static Xtabs getAliceInstance(int[] ids, int[] bins) {
-    return new Xtabs(Ids.ALICE.id(), ids, null, bins);
+    return new Xtabs(ALICE.id(), ids, null, bins);
   }
 
   public static Xtabs getBobInstance(int[] ids, int[] values) {
-    return new Xtabs(Ids.BOB.id(), ids, values, null);
+    return new Xtabs(BOB.id(), ids, values, null);
   }
 
   @Override
@@ -75,8 +62,8 @@ public class Xtabs implements Application<List<Integer>, ProtocolBuilderNumeric>
     List<DRes<SInt>> aliceIds = new ArrayList<>();
     List<DRes<SInt>> bobIds = new ArrayList<>();
     for (int i : ids) {
-      DRes<SInt> idA = numeric.input(BigInteger.valueOf(i), Ids.ALICE.id());
-      DRes<SInt> idB = numeric.input(BigInteger.valueOf(i), Ids.BOB.id());
+      DRes<SInt> idA = numeric.input(BigInteger.valueOf(i), ALICE.id());
+      DRes<SInt> idB = numeric.input(BigInteger.valueOf(i), BOB.id());
       aliceIds.add(idA);
       bobIds.add(idB);
     }
@@ -84,11 +71,11 @@ public class Xtabs implements Application<List<Integer>, ProtocolBuilderNumeric>
     List<DRes<SInt>> binsList = new ArrayList<>();
     List<DRes<SInt>> valuesList = new ArrayList<>();
     for (int i = 0; i < ids.length; i++) {
-      BigInteger bin = (partyId == Ids.ALICE.id()) ? BigInteger.valueOf(bins[i]) : BigInteger.ZERO;
-      DRes<SInt> sBin = builder.numeric().input(bin, Ids.ALICE.id());
+      BigInteger bin = (partyId == ALICE.id()) ? BigInteger.valueOf(bins[i]) : BigInteger.ZERO;
+      DRes<SInt> sBin = builder.numeric().input(bin, ALICE.id());
       binsList.add(sBin);
-      BigInteger value = (partyId == Ids.BOB.id()) ? BigInteger.valueOf(values[i]) : BigInteger.ZERO;
-      DRes<SInt> sValue = builder.numeric().input(value, Ids.BOB.id());
+      BigInteger value = (partyId == BOB.id()) ? BigInteger.valueOf(values[i]) : BigInteger.ZERO;
+      DRes<SInt> sValue = builder.numeric().input(value, BOB.id());
       valuesList.add(sValue);
     }
     // Initialize bin labels and sums

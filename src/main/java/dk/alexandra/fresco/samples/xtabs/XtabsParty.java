@@ -1,5 +1,7 @@
 package dk.alexandra.fresco.samples.xtabs;
 
+import static dk.alexandra.fresco.samples.Id.*;
+
 import dk.alexandra.fresco.framework.Party;
 import dk.alexandra.fresco.framework.configuration.NetworkConfiguration;
 import dk.alexandra.fresco.framework.configuration.NetworkConfigurationImpl;
@@ -24,13 +26,13 @@ public class XtabsParty {
     int partyId = partyIdFromArgs(args);
     logInfo();
     HashMap<Integer, Party> parties = new HashMap<>();
-    parties.put(Xtabs.Ids.ALICE.id(), new Party(Xtabs.Ids.ALICE.id(), "localhost", 12000));
-    parties.put(Xtabs.Ids.BOB.id(), new Party(Xtabs.Ids.BOB.id(), "localhost", 12001));
+    parties.put(ALICE.id(), new Party(ALICE.id(), "localhost", 12000));
+    parties.put(BOB.id(), new Party(BOB.id(), "localhost", 12001));
     NetworkConfiguration netConf = new NetworkConfigurationImpl(partyId, parties);
-    SpdzParty party = SpdzParty.builder(netConf).modLength(128).build();
+    SpdzParty party = SpdzParty.builder(netConf).build();
     CloseableNetwork net = party.getNetwork();
     List<Integer> result;
-    if (partyId == Xtabs.Ids.ALICE.id()) {
+    if (partyId == ALICE.id()) {
       result = party.getSce().runApplication(
           Xtabs.getAliceInstance(ALICE_IDS, BINS), party.getRp(), net);
     } else {
@@ -84,7 +86,7 @@ public class XtabsParty {
           + "indicating the party id as an integer (1 or 2). Argument given \"" + args[0] + "\"",
           e);
     }
-    if (!(partyId == Xtabs.Ids.ALICE.id() || partyId == Xtabs.Ids.BOB.id())) {
+    if (!(partyId == ALICE.id() || partyId == BOB.id())) {
       throw new IllegalArgumentException(
           "Party id out of range. A single argument is needed indicating the party id"
               + " as an integer (1 or 2). The argument given was \"" + partyId + "\"");

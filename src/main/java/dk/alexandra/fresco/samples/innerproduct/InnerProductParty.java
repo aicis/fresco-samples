@@ -1,5 +1,7 @@
 package dk.alexandra.fresco.samples.innerproduct;
 
+import static dk.alexandra.fresco.samples.Id.*;
+
 import dk.alexandra.fresco.framework.Party;
 import dk.alexandra.fresco.framework.configuration.NetworkConfiguration;
 import dk.alexandra.fresco.framework.configuration.NetworkConfigurationImpl;
@@ -23,8 +25,8 @@ public class InnerProductParty {
     int partyId = partyIdFromArgs(args);
     logInfo();
     HashMap<Integer, Party> parties = new HashMap<>();
-    parties.put(1, new Party(1, "localhost", 12000));
-    parties.put(2, new Party(2, "localhost", 12001));
+    parties.put(ALICE.id(), new Party(ALICE.id(), "localhost", 12000));
+    parties.put(BOB.id(), new Party(BOB.id(), "localhost", 12001));
     NetworkConfiguration netConf = new NetworkConfigurationImpl(partyId, parties);
     SpdzParty party = SpdzParty.builder(netConf).build();
     CloseableNetwork net = party.getNetwork();
@@ -42,18 +44,15 @@ public class InnerProductParty {
   private static int partyIdFromArgs(String[] args) {
     int myId = -1;
     if (args.length != 1) {
-      System.err.println("A single argument is needed indicating the party id. Arguments given were \"" + String.join(" ", args) + "\"");
-      System.exit(1);
+      throw new IllegalArgumentException("A single argument is needed indicating the party id. Arguments given were \"" + String.join(" ", args) + "\"");
     }
     try {
       myId = Integer.parseInt(args[0]);
     } catch (NumberFormatException e) {
-      System.err.println("Could not parse argument \"" + args[0] + "\" as an integer (this argument should specify the party id)");
-      System.exit(1);
+      throw new IllegalArgumentException("Could not parse argument \"" + args[0] + "\" as an integer (this argument should specify the party id)");
     }
-    if (!(myId == 1 || myId == 2)) {
-      System.err.println("Party id must be either 1 or 2, but was " + myId);
-      System.exit(1);
+    if (!(myId == ALICE.id() || myId == BOB.id())) {
+      throw new IndexOutOfBoundsException("Party id must be either 1 or 2, but was " + myId);
     }
     return myId;
   }
