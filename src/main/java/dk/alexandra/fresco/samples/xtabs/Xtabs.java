@@ -4,10 +4,10 @@ import static dk.alexandra.fresco.samples.Id.*;
 
 import dk.alexandra.fresco.framework.Application;
 import dk.alexandra.fresco.framework.DRes;
-import dk.alexandra.fresco.framework.builder.numeric.Comparison;
 import dk.alexandra.fresco.framework.builder.numeric.Numeric;
 import dk.alexandra.fresco.framework.builder.numeric.ProtocolBuilderNumeric;
 import dk.alexandra.fresco.framework.value.SInt;
+import dk.alexandra.fresco.lib.common.compare.Comparison;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +86,7 @@ public class Xtabs implements Application<List<Integer>, ProtocolBuilderNumeric>
       binSums.add(numeric.known(BigInteger.ZERO));
     }
     // Compute bin sums
-    Comparison comparison = builder.comparison();
+    Comparison comparison = Comparison.using(builder);
     for (int i = 0; i < aliceIds.size(); i++) {
       DRes<SInt> idA = aliceIds.get(i);
       List<DRes<SInt>> indexVector = new ArrayList<>(binLabels.size());
